@@ -32,9 +32,9 @@ Real-time: WebSockets, socket.io
 # 📂 Project Setup
 1. Clone the repository:
 
-git clone https://github.com/your-username/social-media-clone.git
+     git clone https://github.com/your-username/social-media-clone.git
 
-cd social-media-clone
+     cd social-media-clone
 
 2. Install dependencies--
 
@@ -89,17 +89,29 @@ cd social-media-clone
     Create a .env file in the root directory.
 
     Add API keys and database credentials.
+   
     PORT=
+   
     DATABASE_URL="mongodb+srv....................net/"
+   
     DATABASE_NAME="-----"
+   
     SESSION_SECRET="----------------"
+   
     TOKEN_KEY="-------------"
+   
     CLOUD_NAME="-----------"
+   
     API_KEY="-----------------"
+   
     API_SECRET_KEY="------------------"
+   
     EMAIL_HOST="smtp.gmail.com"
+   
     EMAIL_PORT=587
+   
     EMAIL_USER="---------------"
+   
     EMAIL_PASS="-------------"
 
 5. Run the project
