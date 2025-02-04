@@ -1,0 +1,45 @@
+<div class="createpost usereditprofile" style="display: none;min-height: 260px;">
+    <h1>Edit Profile</h1>
+    <form action="/editprofile" method="post" enctype="multipart/form-data">
+        <i class="fa-solid fa-xmark closeeditprofile"></i>
+        <h4>Full Name:
+            <input style="margin: 0px; padding: 7px;" type="text" placeholder="Enter name..." name="name" required>
+        </h4>
+        <h4>Bio&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+            <input style="margin: 0px; padding: 7px;" type="text" placeholder="write..." name="bio" required>
+        </h4>
+        <h4>Gender:
+            <input style=" width: auto;" type="radio"  name="gender" value="male">Male
+            <input style=" width: auto;" type="radio"  name="gender" value="female">Female
+        </h4>
+        <input type="file" style="display: none;" name="file" id="post" accept="image/*">
+        <img src="" id="previewimage" style="display: none;">
+        <label for="post">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; select profile pic &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <input type="submit" value="submit" id="submit-post">
+    </form>
+
+</div>
+<script>
+    let imageinput = document.getElementById("post")
+    let previewimage = document.getElementById("previewimage")
+    imageinput.addEventListener("change", (event) => {
+        if (event.target.files.length != 0) {
+            let tempurl = URL.createObjectURL(event.target.files[0]);
+            previewimage.setAttribute("src", tempurl)
+            previewimage.style.display = 'block'
+            document.getElementById("submit-post").style.display="block"
+        } else {
+            previewimage.style.display = 'none'
+        }
+
+    })
+    document.querySelector(".closeeditprofile").addEventListener("click",(event)=>{
+        // console.log("dfdf")
+        document.querySelector(".usereditprofile").style.display="none"
+       
+    })
+   
+    document.querySelector("#submit-post").addEventListener("click",()=>{
+        document.querySelector("#submit-post").value="Please wait.."
+    })
+</script>

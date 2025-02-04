@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> social</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css" />
+  <link rel="stylesheet" href="/stylesheets/home.css" />
+  <link rel="stylesheet" href="/stylesheets/login.css" />
+</head>
+
+<body>
+  
+  <!-- navbar -->
+  <%-include("navbar")-%>
+
+    <main>
+
+
+      <!-- left sidebar -->
+      <div class="container">
+        <%-include("left_sidebar")-%>
+
+          <%-include("middle_page")-%>
+            <%-include("right_sidebar")-%>
+            <!-- middle page -->
+            <!-- right sidebar-->
+            
+          </div>
+        </main>
+        
+        <script>
+          document.querySelector("#home").classList.add("active")
+          </script>
+    
+ 
+ 
+ 
+
+ <%-include("socket")-%>
+
+      <script src="/javascripts/home.js"></script>
+      <script src="/javascripts/flashmessage.js"></script>
+</body>
+
+</html>

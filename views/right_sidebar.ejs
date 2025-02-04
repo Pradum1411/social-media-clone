@@ -1,0 +1,152 @@
+<div class="right">
+
+    <div class="messages">
+        <div class="category">
+            <h6 class="active" id="h61">Suggested User</h6>
+            <!-- <h6 id="h62">Requests(7)</h6> -->
+        </div>
+    </div>
+    <%if(user!=null){%>
+        <div class="messages" id="suggesteduser">
+            <div class="message" style="display: block;">
+                <%alluser.forEach(item=>{%>
+                    <a href="/getprofile/<%=item._id%>">
+                        <div class="message"  style="margin-top: 10px;">
+                            <div class="profile-pic">
+                                <img src="<%=item.profilePicture%>">
+                                <div class="active"></div>
+                            </div>
+                            <div class="message-body">
+                                <h5>
+                                    <%= item.username.substring(0, 20) %>
+                                </h5>
+                                <p class="text-muted">
+                                    <%=item.bio%>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <%})%>
+            </div>
+        </div>
+</div>
+<!-- <div class="message">
+                <div class="profile-pic">
+                    <img src="images/profile-18.jpg">
+                    <div class="active"></div>
+                </div>
+                <div class="message-body">
+                    <h5>Dan Smith</h5>
+                    <p class="text-bold">2 New Messages</p>
+                </div>
+            </div>
+            <div class="message">
+                <div class="profile-pic">
+                    <img src="images/profile-15.jpg">
+                </div>
+                <div class="message-body">
+                    <h5>Chris Brown</h5>
+                    <p class="text-muted">Lol u right</p>
+                </div>
+            </div>
+            <div class="message">
+                <div class="profile-pic">
+                    <img src="images/profile-14.jpg">
+                </div>
+                <div class="message-body">
+                    <h5>Lana Rose</h5>
+                    <p class="text-bold">Birthday tomorrow!!</p>
+                </div>
+            </div>
+            <div class="message">
+                <div class="profile-pic">
+                    <img src="images/profile-11.jpg">
+                </div>
+                <div class="message-body">
+                    <h5>Varun Nair</h5>
+                    <p class="text-muted">Ssup?</p>
+                </div>
+            </div>
+            <div class="message">
+                <div class="profile-pic">
+                    <img src="images/profile-1.jpg">
+                    <div class="active"></div>
+                </div>
+                <div class="message-body">
+                    <h5>Jahnvi Doifode</h5>
+                    <p class="text-bold">3 New Messages</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="friend-requests" id="friendrrequest" style="display: none;">
+       
+        <div class="request">
+            <div class="info">
+                <div class="profile-pic">
+                    <img src="images/profile-13.jpg">
+                </div>
+                <div>
+                    <h5>Wilson Fisk</h5>
+                    <p class="text-muted">8 mutual friends</p>
+
+                </div>
+            </div>
+            <div class="action">
+                <button class="btn btn-primary">Accept</button>
+                <button class="btn">Decline</button>
+            </div>
+        </div>
+        <div class="request">
+            <div class="info">
+                <div class="profile-pic">
+                    <img src="images/profile-20.jpg">
+                </div>
+                <div>
+                    <h5>Srishti Tirkey</h5>
+                    <p class="text-muted">2 mutual friends</p>
+
+                </div>
+            </div>
+            <div class="action">
+                <button class="btn btn-primary">Accept</button>
+                <button class="btn">Decline</button>
+            </div>
+        </div>
+        <div class="request">
+            <div class="info">
+                <div class="profile-pic">
+                    <img src="images/profile-5.jpg">
+                </div>
+                <div>
+                    <h5>Christ Kahea</h5>
+                    <p class="text-muted">1 mutual friend</p>
+
+                </div>
+            </div>
+            <div class="action">
+                <button class="btn btn-primary">Accept</button>
+                <button class="btn">Decline</button>
+            </div>
+        </div>
+
+    </div>
+<%}%>
+
+
+</div>
+
+<script>
+    document.querySelector("#h61").addEventListener("click",()=>{
+        document.querySelector("#suggesteduser").style.display="block"
+        document.querySelector("#friendrrequest").style.display="none"
+        document.querySelector("#h61").classList.add("active")
+        document.querySelector("#h62").classList.remove("active")
+    })
+    document.querySelector("#h62").addEventListener("click",()=>{
+        document.querySelector("#friendrrequest").style.display="block"
+        document.querySelector("#suggesteduser").style.display="none"
+        document.querySelector("#h62").classList.add("active")
+        document.querySelector("#h61").classList.remove("active")
+    })
+</script> -->

@@ -1,0 +1,149 @@
+<!-- 
+
+
+<%if(user!=null){%>
+    <div class="userprofile">
+        <i class="fa-solid fa-xmark closeprofilebutton"></i>
+        <div class="profilebox">
+            <div class="profilephoto">
+                <img src="<%=user.profilePicture%>" alt="" />
+            </div>
+            <div class="userdetail">
+                name:<span>
+                   
+                    <%=user.name%>
+                </span> Gender:<span>
+                    <%=user.gender%>
+                </span><br>
+                post:<span>
+                    <%=user.posts.length%>
+                </span>
+                followers:<span>
+                    <%=user.followers.length%>
+                </span>
+                followings:<span>
+                    <%=user.following.length%>
+                </span><br>
+                Bio:<span>
+                    <%=user.bio%>
+                </span>
+                <button id="openeditprofile"> Edit Profile </button>
+            </div>
+        </div>
+        <div class="postbox">
+            <button class="button_show_post">All Post</button>
+            <button class="button_show_post">Followers</button>
+            <button class="button_show_post">Following</button>
+            <button class="button_show_post">Bookmark</button>
+        </div>
+
+        
+            <div style="display:block" class="allpost">
+
+                <%user.posts.forEach(item=>{%>
+                    <div class="card1">
+                        <img class="fimg" src=<%=item.image%>>
+                        <div class="fcap"><br><br>
+                            <h1><i class="fa-solid fa-heart"></i>
+                                <%=item.likes.length%>
+                            </h1><br><br>
+                            &nbsp;<h1>&nbsp;&nbsp;<i class="fa-solid fa-comment"></i>
+                                <%=item.comments.length%>
+                            </h1>
+
+                        </div>
+                    </div>
+                    <%})%>
+
+            </div>
+
+            <div style="display:none" class="bookmark">
+
+                <%user.bookmarks.forEach(item=>{%>
+                    <div class="card1">
+                        <img class="fimg" src=<%=item.image%>>
+                        <div class="fcap"><br><br>
+                            <h1><i class="fa-solid fa-heart"></i>
+                                <%=item.likes.length%>
+                            </h1><br><br>
+                            &nbsp;<h1>&nbsp;&nbsp;<i class="fa-solid fa-comment"></i>
+                                <%=item.comments.length%>
+                            </h1>
+
+                        </div>
+                    </div>
+                    <%})%>
+
+            </div>
+
+            <div style="display:none" class="following">
+                <div class="allfollowers">
+                    following
+                    <%user.following.forEach(i=>{%>
+                    <div style="height: 50px; display: flex;">
+                        <div class="allfollowersimg">
+                            <img src="<%=i.profilePicture%>" alt="">
+                        </div>
+                        <div class="allfollowerstext">
+                            <span>@ <%=i.username%></span>
+                        </div><br>                                               
+                    </div>
+                    <%})%>
+                </div>
+            </div>
+
+
+            <div style="display:none" class="followers">
+                <div class="allfollowers">
+                    followers
+                    <%user.followers.forEach(i=>{%>
+                    <div style="height: 50px; display: flex;">
+                        <div class="allfollowersimg">
+                            <img src="<%=i.profilePicture%>" alt="">
+                        </div>
+                        <div class="allfollowerstext">
+                            <span>@ <%=i.username%></span>
+                        </div>
+                    </div>
+                      <%})%>
+                 </div>
+            </div>
+    </div>
+    <%}%>
+
+    <script>
+        let data = document.querySelectorAll(".button_show_post")
+        data[0].addEventListener("click", () => {
+            document.querySelector(".allpost").style.display = "block"
+            document.querySelector(".followers").style.display = "none"
+            document.querySelector(".following").style.display = "none"
+            document.querySelector(".bookmark").style.display = "none"
+        })
+        data[1].addEventListener("click", () => {
+            document.querySelector(".allpost").style.display = "none"
+            document.querySelector(".followers").style.display = "block"
+            document.querySelector(".following").style.display = "none"
+            document.querySelector(".bookmark").style.display = "none"
+        })
+        data[2].addEventListener("click", () => {
+            
+            document.querySelector(".allpost").style.display = "none"
+            document.querySelector(".followers").style.display = "none"
+            document.querySelector(".following").style.display = "block"
+            document.querySelector(".bookmark").style.display = "none"
+        })
+        data[3].addEventListener("click", () => {
+          
+            document.querySelector(".allpost").style.display = "none"
+            document.querySelector(".followers").style.display = "none"
+            document.querySelector(".following").style.display = "none"
+            document.querySelector(".bookmark").style.display = "block"
+        })
+        document.getElementById("openeditprofile").addEventListener("click", () => {
+            console.log("ji")
+            document.querySelector(".usereditprofile").style.display = "block"
+        })
+        document.querySelector(".closeprofilebutton").addEventListener("click", () => {
+            document.querySelector(".userprofile").style.display = "none"
+        })
+    </script> -->

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> social</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css" />
+    <link rel="stylesheet" href="/stylesheets/home.css" />
+    <link rel="stylesheet" href="/stylesheets/login.css" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav>
+
+
+        <div class="container">
+            <h2 class="logo">Social</h2>
+            <div class="search-bar">
+                <i class="uil uil-search"></i>
+                <input type="search" placeholder="Search for creators" />
+            </div>
+            <div class="create">
+                <% if(user!=null){%>
+                    <span style="font-size: 20px; ">@<%=user.username%></span>
+                    <div class="profile-pic">
+                        <img src=<%=user.profilePicture%> alt="" />
+                    </div>
+                    <%} else {%>
+                        <a href="/login" class="login_page">login</a>
+                        <%}%>
+            </div>
+        </div>
+        <%-include("editprofile")-%>
+            <%-include("createpost")-%>
+    </nav>
+    <main>
+        <div class="container" >
+            <%-include("left_sidebar")-%>
+                <div style="display: flex;">
+                    <div class="leftmessage">
+                        <div style="text-align: center; margin: 10px;">
+                            <b ><%=user.username%></b>
+
+                        </div>---------------------------------
+                       <% alluser.forEach(item=>{%>
+                        <a href="/usermessages/<%=item._id%>">
+                        <div style="height: 50px; display: flex;  margin-bottom: 6px;" class="a1">
+                            <div  class="profile-pic" style="margin-left: 20px;" >
+                                <img src="<%=item.profilePicture %>" alt="">
+                            </div>
+                            <%if(item.isOnline){%>
+                            <div class="onlineuser" id="<%=item._id%>"></div>
+                            <%}else{%>
+                                <div id="<%=item._id%>"></div>
+                                <%}%>
+                            <div style="margin: 10px 0px 0px 10px;">
+                                <span > <%=item.username.substring(0, 22)%></span>
+                            </div>
+                        </div></a>
+                        <%}) %>
+                       
+                    </div>
+                    <div class="rightmessage">
+                      
+                        <div style="width: 100%; height: 150px;  border-radius: 11px; margin-top: 100px;">
+                              <i style="color: black;" class="fa-regular fa-paper-plane shareicon"></i>
+                              <div style="text-align: center;margin: auto;"><h3>Your Messages</h3></div>
+                              <div style="text-align: center;margin: auto; font-size: 12px;">Send Private Photo And Messages to a Freind or Group</div>
+                            <div style="text-align: center;margin: auto; border: 1px solid rgb(60, 59, 59); width: 160px;  background: #cad1d0;  border-radius: 10px;">  send message</div> 
+                        </div>   
+                        
+                    </div>
+                </div>
+        </div>
+    </main>
+    <%-include("socket")-%>
+    
+<script>
+    document.querySelector("#messages-notifications").classList.add("active")
+</script>
+<script src="/javascripts/home.js"></script>
+    <script src="/javascripts/flashmessage.js"></script>
+</body>
+</html>

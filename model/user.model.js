@@ -1,0 +1,51 @@
+const mongoose=require("mongoose")
+
+const userSchema=mongoose.Schema({
+    name:{
+        type:String,
+        default:""
+    },
+    username:{
+        type:String,
+    },
+    email:{
+        type:String,
+    },
+    password:{
+        type:String,     
+    },
+    profilePicture:{
+        type:String,
+        default:""
+    },
+    bio:{
+        type:String,
+        default:""
+    },
+    gender:{
+        type:String,
+        enum:['male','female','other']
+    },
+    followers:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user"
+    }],
+    following:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user"
+    }],
+    posts:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"post"
+    }],
+    bookmarks:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"post"
+    }],
+    isOnline:{
+        type:Boolean,
+        default:true
+    }
+},{timestamps:true})
+
+module.exports=mongoose.model("user",userSchema)

@@ -1,0 +1,242 @@
+
+
+<div class="middle">
+    <% if (user != null) { %>
+        <!-- HTML or other JSP code here -->
+   
+    <div class="stories" >
+       
+        <div class="story" style="background-image: url(<%=user.profilePicture%>);max-width: 150px;background-repeat: no-repeat" >
+            <div class="profile-pic">
+                <img src=<%=user.profilePicture%> alt="">
+                
+            </div>
+            <p class="name addstr1" style="cursor: pointer;">Add Story</p>
+        </div>
+       
+        <%story.forEach(item=>{%>
+        <div class="story" id="<%=item._id%>-story" style="max-width: 150px; background-image: url(<%=item.story%>);background-repeat: no-repeat; background-size: 150px 150px;">
+            <div class="profile-pic" >
+                <img src=<%=item.storyuserid.profilePicture%> alt="">
+            </div>
+            <!-- <%=user._id.toString()%>
+            <%=(item.storyuserid._id.toString()==user._id)%> -->
+                <%if(item.storyuserid._id.toString()==user._id){%>
+            <i class="deletest" id="<%=item._id%>" style="cursor: pointer; position: relative; top:70px; left: 45px; color: rgb(89, 7, 7);">remove</i>
+            <%}%>
+                <p class="name"><%=item.storyuserid.username%></p>
+        </div>
+        <%})%>
+       
+       
+    </div>
+
+    <% } %>
+
+    <div class="feeds">
+
+        <% post.forEach(item=> { %>
+            <div class="feed">
+                <div class="head">
+
+                </div>
+                <div class="user">
+                    <div class="profile-pic">
+                        <img src=<%=item.auther.profilePicture%> alt="">
+
+                    </div>
+                    <div class="info">
+                        <h3 class="searchusername">
+                            <%=item.auther.username%>
+                        </h3>
+                        <small>
+                            <%=item.createdAt.toString().substring(0,24)%>
+                        </small>
+                    </div>
+                    <div class="edit1">
+                        <%if(user!=null && user._id.toString()!=item.auther._id.toString()){%>
+                            <%let follo=user.following.map(item=>item._id.toString())%>
+
+                                <%if(follo.includes(item.auther._id.toString())){%>
+                                    <a href="/unfollow/<%=item.auther._id%>">unfollow</a>
+                                    <%}else{%>
+
+                                        <a href="/follow/<%=item.auther._id%>">follow</a>
+                                        <%}%>
+                                            <%}%>
+                    </div>
+
+                </div>
+                <!-- <div class="showunfollow"></div> -->
+
+                <div class="photo">
+                    <img src=<%=item.image%> alt="">
+                </div>
+
+                <div class="action-button">
+                    <div class="interaction-button">
+                        <%if(user!=null){%>
+                            <%let likearr=item.likes.map(item=>item._id.toString())%>
+
+                                <%if(likearr.includes(user._id.toString())){%>
+                                    <span style="cursor: pointer;" id="<%=item._id%>-a" class="thumb2" > <i
+                                                style="color: rgb(239, 26, 26);"
+                                                id="<%=item._id%>-like"
+                                                class="fa-solid fa-heart"></i></a></span>
+                                    <%}else{%>
+                                        <span style="cursor: pointer;" id="<%=item._id%>-b" class="thumb2"><i
+                                                    
+                                                    id="<%=item._id%>-like"
+                                                    class="fa-solid fa-heart"></i></a></span>
+                                        <%}%>
+                                            <%}else{%>
+                                                <span style="cursor: pointer;"><a href="/likepost/<%=item._id%>"><i
+                                                            class="uil uil-thumbs-up"></i></a></span>
+                                                <%}%>
+
+                                                    <span style="font-size: 15px; margin: auto;">
+                                                       <sup id="<%=item._id%>c"> <%=item.likes.length%></sup>
+                                                    </span>
+                                                    <div class="viewcomment" style="display: none;">
+                                                        <h1>All Comment..</h1>
+                                                        <i class="fa-solid fa-xmark closecomment"></i>
+                                                        <div class="innerviewcomment">
+                                                            <div class="profilephoto">
+                                                                <img src="<%=item.image%>" alt="" />
+                                                            </div>
+                                                            <div class="userdetail" style="overflow-x: auto; " >
+                                                                <!-- <form action="/comment/<%=item._id%>" method="post"> -->
+                                                                    <div class="commentbutton2"
+                                                                    ><input type="text" id="<%=item._id%>-tt"
+                                                                            placeholder="comment.." name="comment"
+                                                                            style=" outline: none; width: 79%;height: 100%;font-size: 20px;">
+                                                                        <input type="submit" value="save" class="ss2" id="<%=item._id%>-zz"
+                                                                            style="background-color: rgb(89, 122, 150);width: 18%; height: 100%;font-size: 20px; cursor: pointer;">
+                                                                    </div>
+                                                                <!-- </form> -->
+                                                                <%item.comments.forEach(i=>{%>
+                                                                    <div style="width: 100%;height: 50px;">
+                                                                        <img src="<%=i.autherprofilepic%>"
+                                                                            style="height: 50px; width: 50px;border-radius: 50%; display: inline;">
+                                                                        <span class="imgusername"> @<%=i.auther%>
+                                                                                </span><span class="imgusername">
+                                                                            <%=i.text%>
+                                                                        </span>
+                                                                    </div>
+                                                                    <%})%>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                    </div>
+
+                    <span class="postcomment" style="cursor: pointer;"> <i class="uil uil-comment"></i></a></span>
+                    <span style="font-size: 15px;margin-left: -170px;">
+                       <sup id="<%=item._id%>l1"> <%=item.comments.length%></sup>
+                    </span>
+                    <span style="cursor: pointer;"><i class="uil uil-share"></i></span>
+
+                    <div class="bookmark">
+                        <%if(user!=null){%>
+                            <%if(user._id.toString()==item.auther._id.toString()){%>
+                                <a href="/deletepost/<%=item._id%>"><i id="deletpost"
+                                        class="fa-regular fa-trash-can"></i></a>
+                                <%}%>
+                                    <%bookmarkarr=user.bookmarks.map(item=>item._id.toString())%>
+                                        <%if(bookmarkarr.includes(item._id.toString())){%>
+                                            <a  style="cursor: pointer"><i
+                                                id="<%=item._id%>-save" class="fa-solid fa-bookmark" style="color: #e61418;"></i></a>
+                                            <%}else{%>
+                                                <a  style="cursor: pointer; "><i
+                                                        class="fa-solid fa-bookmark" id="<%=item._id%>-unsave"
+                                                        style="color: #101010; left:1px;top: 1px;"></i></a>
+                                                <%}%>
+                                                    <%}%>
+
+                    </div>
+                </div>
+
+                <div class="liked-by">
+                    <%if(item.likes.length>3){%>
+                        <% for (let i=0; i < item.likes.length; i++) { %>
+                            <!-- <li><%= item.likes[i].profilePicture %></li> -->
+                            <span><img src="<%= item.likes[i].profilePicture %>"></span>
+                            <% } %>
+                                <%}else{%>
+                                    <%item.likes.forEach(j=>{%>
+                                        <span><img src="<%=j.profilePicture%>"></span>
+                                        <!-- <%=j%> -->
+                                        <%})%>
+                                            <%}%>
+                                                <%if(item.likes.length>0){%>
+                                                    <p>Liked by <b>@<%=item.likes[0].username%></b>
+                                                        <%if(item.likes.length>1){%> and <b><%=item.likes.length-1%>
+                                                                    others</b>
+                                                            <%}%>
+                                                    </p>
+                                                    <%}%>
+                </div>
+
+                <div class="caption">
+                    <p><b>#<%=item.caption%></b>
+                    </p>
+                </div>
+                <div style="cursor: pointer;" class="comments text-muted text-muted1">
+                    <%if(item.comments.length>0){%>
+                        <%=item.comments.length%> comments and
+                            <%}%>
+                                View all comments
+                </div>
+                <!-- <form action="/comment/<%=item._id%>" method="post"> -->
+                    <input class="savecomment" style="outline: none; width: 100%;" type="text"
+                        placeholder="Add a comment..." id="commenttext">
+                    <input class="savecommentbutton" type="submit" value="save" id="<%=item._id%>">
+                <!-- </form> -->
+            </div>
+            <% }); %>
+
+    </div>
+</div>
+<%if(user!=null){%>
+
+<script>
+    
+    let comment2 = document.querySelectorAll(".postcomment");
+let save1 = document.querySelectorAll(".savecomment");
+let save2 = document.querySelectorAll(".savecommentbutton");
+
+// console.log(save1, save2, comment2);
+
+// Use a proper loop
+comment2.forEach((button, i) => {
+    button.addEventListener("click", () => {
+        let viewComments = document.querySelectorAll(".viewcomment");
+        if (viewComments[i]) {
+            viewComments[i].style.display = "block";
+        }
+    })
+
+        document.querySelectorAll(".text-muted1")[i].addEventListener("click", () => {
+            document.querySelectorAll(".viewcomment")[i].style.display = "block"
+
+        })
+        document.querySelectorAll(".closecomment")[i].addEventListener("click", () => {
+            document.querySelectorAll(".viewcomment")[i].style.display = "none"
+        })
+        save1[i].addEventListener("keydown", () => {
+            if (save1[i].value.length > 5) {
+                save2[i].style.display = "block"
+            } else {
+                save2[i].style.display = "none"
+            }
+      
+        })
+    }  )
+    document.querySelector(".addstr1").addEventListener("click",()=>{
+        // console.log("dd--",document.getElementById("createpost2"))
+        document.getElementById("createpost2").style.display="block"
+    })
+
+</script>
+<%}%>

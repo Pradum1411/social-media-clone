@@ -1,0 +1,42 @@
+<div class="createpost " id="createpost2" style="display: none;">
+    <h1>Add New Story</h1>
+    <form action="/addstory" method="post" enctype="multipart/form-data">
+        <i class="fa-solid fa-xmark closecreatepost2"></i>
+        <!-- <h2>Caption:
+            <input type="text" placeholder="write..." name="caption" required>
+        </h2> -->
+      
+        <input type="file" style="display: none;" name="story" id="post2" accept="image/*">
+        <img src="" id="previewimage2" style="display: none;">
+        <label for="post2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; select Story &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <input type="submit" value="Post Story" id="submit-post2">
+        
+    </form>
+
+</div>
+<%if(user!=null){%>
+<script>
+    let imageinput2 = document.getElementById("post2")
+    let previewimage2 = document.getElementById("previewimage2")
+    imageinput2.addEventListener("change", (even) => {
+        if (even.target.files.length != 0) {
+            let tempurl = URL.createObjectURL(even.target.files[0]);
+            previewimage2.setAttribute("src", tempurl)
+            previewimage2.style.display = 'block'
+            document.getElementById("submit-post2").style.display="block"
+        } else {
+            previewimage2.style.display = 'none'
+            // document.querySelector("reset-post").setAttribute("type","reset")
+        }
+
+    })
+   
+    document.querySelector(".closecreatepost2").addEventListener("click",()=>{
+        document.querySelector("#createpost2").style.display="none"
+        // previewimage1.style.display = 'none'
+    })
+    document.querySelector("#submit-post2").addEventListener("click",()=>{
+        document.querySelector("#submit-post2").value="Please wait.."
+    })
+</script>
+<%}%>

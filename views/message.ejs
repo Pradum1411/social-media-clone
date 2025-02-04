@@ -1,0 +1,124 @@
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> social</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css" />
+    <link rel="stylesheet" href="/stylesheets/home.css" />
+    <link rel="stylesheet" href="/stylesheets/login.css" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav>
+
+
+        <div class="container">
+            <h2 class="logo">Social</h2>
+            <div class="search-bar">
+                <i class="uil uil-search"></i>
+                <input type="search" placeholder="Search for creators" />
+            </div>
+            <div class="create">
+                <% if(user!=null){%>
+                    <span style="font-size: 20px; ">@<%=user.username%></span>
+                    <div class="profile-pic">
+                        <img src=<%=user.profilePicture%> alt="" />
+                    </div>
+                    <%} else {%>
+                        <a href="/login" class="login_page">login</a>
+                        <%}%>
+            </div>
+        </div>
+        <%-include("editprofile")-%>
+            <%-include("createpost")-%>
+    </nav>
+    <main>
+        <div class="container" >
+            <%-include("left_sidebar")-%>
+                <div style="display: flex;">
+                    <div class="leftmessage">
+                        <div style="text-align: center; margin: 10px;">
+                            <b ><%=user.username%></b>
+
+                        </div>---------------------------------
+                       <% alluser.forEach(item=>{%>
+                        <a href="/usermessages/<%=item._id%>"  >
+                            <%if(item._id==usermessage._id.toString()){%>
+                                <div style="height: 50px; display: flex; margin-left: 0px; margin-bottom: 5px; background-color: hsl(252, 30%, 90%);"class="a1">
+                                <%}else{%>
+                                    <div style="height: 50px; display: flex; margin-left: 0px; margin-bottom: 5px;"class="a1">
+                                    <%}%>
+                            <div  class="profile-pic" style="margin-left: 20px;" >
+                                <img src="<%=item.profilePicture %>" alt="">
+                            </div>
+                            <%if(item.isOnline){%>
+                                <div class="onlineuser" id="<%=item._id%>"></div>
+                                <%}else{%>
+                                    <div id="<%=item._id%>"></div>
+                                    <%}%>
+                            <div style="margin: 10px 0px 0px 10px;">
+                                <span> <%=item.username.substring(0, 22)%></span>
+                            </div>
+                        </div></a>
+                        
+                        <%}) %>
+                        
+                    </div>
+                    <div class="rightmessage" name="<%=usermessage._id%>">
+                      
+                        <div style="width: 100%; height: 150px;  border-radius: 11px;">
+                          <div  class="profile-pic"  style="align-items: center;margin: auto; width: 100px;">
+                                <img src="<%=usermessage.profilePicture%>" alt="">
+                            </div>
+                            <div style="text-align: center;margin: auto;" ></div>
+                            <a href="/getprofile/<%=usermessage._id%>"> <div style="text-align: center;margin: auto; border: 1px solid rgb(60, 59, 59); width: 120px; border-radius: 10px;">  viewprofile</div> </a>
+                        </div>   
+                       <div class="middlemessage">
+                        <%chat.forEach(item=>{%>
+                            <%if(item.senderId==user._id.toString()){%>
+                                <div class="m1 rightm1 <%=item._id%>" ><%=item.message%><i class="fa-solid fa-trash" chatid="<%=item._id%>" style="cursor: pointer;" ></i></div>
+                                <%}else{%>
+                                    <div class="m1 leftm1" id="<%=item._id%>"><%=item.message%></div> 
+                                <%}%>
+                            <!-- <%=item.receiverId==user._id.toString()%> -->
+                            <%})%>
+                           <!-- <div class="m1 rightm1">rightfggggggggggggggghghhhhhgdfhfgdhgfhdgfhdghfdfhdh</div>
+                           <div class="m1 rightm1">rightfggggggggggggggghghhhhhgdfhfgdhgfhdgfhdghfdfhdh</div> --> 
+
+                       </div> 
+                      
+                        <div class="sendmessage">
+                            
+                                <input type="text" name="senderId" value="<%=user._id%>" hidden id="senderId1">
+                                <input type="text" name="receiverId" value="<%=usermessage._id%>" hidden id="receiverId1">
+                            <input style="background-color: rgb(221, 225, 227); outline: none; margin: 10px 10px 2px 20px; padding: 7px; width: 530px; height: 36px; font-size: 14px;" type="text" name="message" placeholder="Message.." id="message1">
+                            <input  style="margin: 10px 10px 2px 20px; padding: 7px; width: 100px; height: 36px; font-size: 20px;" value="send" type="submit" id="sendusermessage">
+                       
+                        </div>
+
+                        
+                    </div>
+                </div>
+        </div>
+    </main>
+    <%-include("socket")-%>
+<script>
+    document.querySelector("#messages-notifications").classList.add("active")
+    
+</script>
+<script src="/javascripts/home.js"></script>
+    <script src="/javascripts/flashmessage.js"></script>
+</body>
+</html>

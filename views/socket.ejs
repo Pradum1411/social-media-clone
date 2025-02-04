@@ -1,0 +1,382 @@
+<%if(user!=null){%>
+
+  <script>
+    let senderId = "<%=user._id%>"
+
+    const socket = io("/chat", {
+      auth: {
+        userId: "<%=user._id%>"
+      }
+    });
+
+
+    socket.on("getOnlineUser", (data) => {
+      let d = document.getElementById(data.userId)
+      if (d) {
+        d.classList.add("onlineuser")
+        console.log("getOnlineUser--", d, data)
+      }
+    })
+    socket.on("getOfflineUser", (data) => {
+      let d = document.getElementById(data.userId)
+      if (d) {
+        d.classList.remove("onlineuser")
+        console.log("getofflineUser--", d, data)
+      }
+    })
+    // update user online status
+    if (document.querySelector("#sendusermessage")) {
+      document.querySelector("#sendusermessage").addEventListener("click", (event) => {
+        event.preventDefault()
+        let message1 = document.querySelector("#message1").value
+        let senderId1 = document.querySelector("#senderId1").value
+        let receiverId1 = document.querySelector("#receiverId1").value
+
+        $.ajax({
+          url: "/savechat", // API endpoint
+          type: "POST", // HTTP method
+          data: {
+            message: message1,
+            senderId: senderId1,
+            receiverId: receiverId1
+          },
+          success: function (response) {
+            let newDiv = document.createElement("div");
+            let iDiv = document.createElement("i");
+            iDiv.classList.add("fa-solid");
+            iDiv.classList.add("fa-trash");
+            iDiv.style.cursor = "pointer"
+            iDiv.setAttribute("chatid", response._id)
+            newDiv.textContent = response.message;
+
+            newDiv.classList.add("m1");
+            newDiv.classList.add("rightm1");
+            newDiv.appendChild(iDiv)
+            document.querySelector(".middlemessage").appendChild(newDiv)
+            socket.emit("newChat", response)
+            console.log("Message saved successfully:", response);
+            scrollChat()
+          },
+          error: function (xhr, status, error) {
+            console.error("Error saving message:", error);
+          }
+        });
+        console.log("kkk", message1, senderId1, receiverId1)
+        document.querySelector("#message1").value = ""
+
+
+      })
+    }
+
+    if (document.querySelector(".rightmessage")) {
+      let receiverId = document.querySelector(".rightmessage").getAttribute("name")
+      console.log("senderId--", senderId)
+      console.log("receiverId--", receiverId)
+      socket.on("loadnewChat", (response) => {
+
+        if (senderId == response.receiverId.toString() && receiverId == response.senderId.toString()) {
+
+          let newDiv = document.createElement("div");
+          newDiv.textContent = response.message;
+          newDiv.classList.add("m1");
+          newDiv.classList.add("leftm1");
+          console.log("hiii--", response)
+          document.querySelector(".middlemessage").appendChild(newDiv)
+          scrollChat()
+        }
+      })
+    }
+
+    socket.on("updatedeletedchat", (id) => {
+      // console.log("updatedeletedchat:");
+      document.getElementById(`${id}`).remove()
+      document.getElementsByClassName(`${id}`)[0].remove()
+
+    })
+    function scrollChat() {
+      let chatBox = document.querySelector(".middlemessage");
+      console.log("jjj", chatBox)
+      if (chatBox) {
+
+        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+
+
+      }
+    }
+
+    scrollChat();
+
+    document.querySelectorAll(".fa-trash").forEach((button, index) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault(); // Ensure event is passed
+
+        console.log("Deleting:", button);
+
+        let chatid = button.getAttribute("chatid");
+        if (!chatid) return;
+
+        $.ajax({
+          url: "/deletchat",
+          type: "POST",
+          data: { chatid: chatid },
+          success: function (response) {
+            if (response === true) {
+              let messageElement = document.querySelectorAll(".rightm1")[index];
+              if (messageElement) {
+                messageElement.remove();
+                scrollChat();
+                socket.emit("deletedchat", chatid);
+                console.log("Message deleted successfully:", response);
+              }
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error deleting message:", error);
+          }
+        });
+      });
+    });
+
+
+    document.querySelectorAll(".thumb2").forEach((button) => {
+      button.addEventListener("click", async (event) => {
+        console.log("hhiiii", button.getAttribute("id"));
+
+        let id = button.getAttribute("id").split("-");
+        if (!id) return;
+
+        console.log(id, id[0], id[1])
+        event.preventDefault();
+        try {
+          let response;
+          let nextid;
+          let countdata;
+          if (id[1] == "b") {
+            response = await fetch(`/likepost/${id[0]}`, { method: "GET" });
+            nextid = id[0] + '-a'
+            countdata = parseInt(document.getElementById(`${id[0]}c`).innerText) + 1
+          } else {
+            response = await fetch(`/dislikepost/${id[0]}`, { method: "GET" });
+            nextid = id[0] + '-b'
+            countdata = parseInt(document.getElementById(`${id[0]}c`).innerText) - 1;
+          }
+          let result = await response.json(); // Assuming the server returns JSON
+
+          if (response) {
+            let aa = document.getElementById(id[0] + "-like")
+            console.log("--", aa)
+            if (aa) {
+              aa.style.color = result.color
+              button.setAttribute("id", nextid);
+              document.getElementById(`${id[0]}c`).innerText = countdata
+              socket.emit("likedpost", countdata);
+            }
+
+            console.log("Message liked successfully--:", result, countdata);
+
+          }
+        } catch (error) {
+          console.error("Error message:", error);
+        }
+      });
+    });
+
+    socket.on("likedpostupdate", (data) => {
+      document.getElementById(`${id[0]}c`).innerText = data
+
+    });
+
+    // save comment 1
+    document.querySelectorAll(".savecommentbutton").forEach((button, i) => {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        try {
+          let z = document.querySelectorAll("#commenttext")[i];
+          let postId = button.getAttribute("id")
+          commentlength = parseInt(document.getElementById(`${postId}l1`).innerText)
+          // console.log("post id--",postId)
+          if (z) {
+            let response = await fetch(`/comment/${postId}`, {
+              method: "POST", // Corrected method syntax
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ "comment": z.value }) // Corrected body syntax
+            });
+            let result = await response.json();
+            if (result.message) {
+              const profileDiv = document.createElement("div");
+              profileDiv.style.cssText = "width: 100%; height: 50px; display: flex; align-items: center; gap: 10px;";
+
+              const img = document.createElement("img");
+              img.src = `<%=user.profilePicture%>`;
+              img.alt = ``;
+              img.style.cssText = "height: 50px; width: 50px; border-radius: 50%;";
+
+              const textDiv = document.createElement("div");
+
+              const usernameSpan = document.createElement("span");
+              usernameSpan.classList.add("imgusername");
+              usernameSpan.textContent = `@<%=user.username%>`;
+              const textSpan = document.createElement("span");
+              textSpan.classList.add("imgusername");
+              textSpan.textContent = z.value;
+
+              textDiv.appendChild(usernameSpan);
+              textDiv.appendChild(textSpan);
+              profileDiv.appendChild(img);
+              profileDiv.appendChild(textDiv);
+              
+          document.querySelectorAll(".userdetail")[i].appendChild(profileDiv)
+          document.getElementById(`${postId}l1`).innerText=commentlength+1
+          socket.emit("updatecomment",({"id":`${postId}`,"lent":commentlength+1,"text":z.value}))
+          z.value = ""
+
+          // console.log("duu",document.querySelectorAll(".userdetail"))
+              // document.getElementById("userdetail").appendChild(profileDiv);
+            }
+            console.log("Comment submitted:", result.message);
+
+          }
+        } catch (error) {
+          console.log("responce error", error)
+        }
+      })
+    })
+
+    // save comment 2
+    document.querySelectorAll(".ss2").forEach((button, i) => {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        try {
+          let postId = button.getAttribute("id").split("-")[0]
+          let z = document.getElementById(`${postId}-tt`).value;
+          commentlength = parseInt(document.getElementById(`${postId}l1`).innerText)
+          // console.log("post id1--",postId,z)
+          if (z) {
+            let response = await fetch(`/comment/${postId}`, {
+              method: "POST", // Corrected method syntax
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ "comment": z }) // Corrected body syntax
+            });
+            let result = await response.json();
+            if (result.message) {
+              const profileDiv = document.createElement("div");
+              profileDiv.style.cssText = "width: 100%; height: 50px; display: flex; align-items: center; gap: 10px;";
+
+              const img = document.createElement("img");
+              img.src = `<%=user.profilePicture%>`;
+              img.alt = ``;
+              img.style.cssText = "height: 50px; width: 50px; border-radius: 50%;";
+
+              const textDiv = document.createElement("div");
+
+              const usernameSpan = document.createElement("span");
+              usernameSpan.classList.add("imgusername");
+              usernameSpan.textContent = `@<%=user.username%>`;
+              const textSpan = document.createElement("span");
+              textSpan.classList.add("imgusername");
+              textSpan.textContent = z;
+
+              textDiv.appendChild(usernameSpan);
+              textDiv.appendChild(textSpan);
+              profileDiv.appendChild(img);
+              profileDiv.appendChild(textDiv);
+              
+          document.querySelectorAll(".userdetail")[i].appendChild(profileDiv)
+          document.getElementById(`${postId}l1`).innerText=commentlength+1
+          socket.emit("updatecomment",({"id":`${postId}`,"lent":commentlength+1,"text":z}))
+          document.getElementById(`${postId}-tt`).value="";
+            }
+            console.log("Comment submitted:", result.message);
+
+          }
+        } catch (error) {
+          console.log("responce error", error)
+        }
+      })
+    })
+
+
+    socket.on("newupdatecomment",(data)=>{
+      console.log("data",data)
+      document.getElementById(`${data.id}l1`).innerText=data.lent
+      const profileDiv = document.createElement("div");
+              profileDiv.style.cssText = "width: 100%; height: 50px; display: flex; align-items: center; gap: 10px;";
+
+              const img = document.createElement("img");
+              img.src = `<%=user.profilePicture%>`;
+              img.alt = ``;
+              img.style.cssText = "height: 50px; width: 50px; border-radius: 50%;";
+
+              const textDiv = document.createElement("div");
+
+              const usernameSpan = document.createElement("span");
+              usernameSpan.classList.add("imgusername");
+              usernameSpan.textContent = `@<%=user.username%>`;
+              const textSpan = document.createElement("span");
+              textSpan.classList.add("imgusername");
+              textSpan.textContent = data.text;
+
+              textDiv.appendChild(usernameSpan);
+              textDiv.appendChild(textSpan);
+              profileDiv.appendChild(img);
+              profileDiv.appendChild(textDiv);
+              
+      document.getElementById(`${data.id}mm`).appendChild(profileDiv)
+      // console.log(document.getElementById(`${data.id}mm`))
+
+      
+    })
+    // bookmark post
+    document.querySelectorAll(".fa-bookmark").forEach((button,i)=>{
+      button.addEventListener("click", async (event)=>{
+        event.preventDefault()
+        let id=button.id.split("-")
+        console.log("id--",id)
+        if(id){
+          let response;
+          if(id[1]=="save"){
+            response=await fetch(`/removebookmarkpost/${id[0]}`,{method:"GET"})
+          }else{
+            response=await fetch(`/bookmarkpost/${id[0]}`,{method:"GET"})
+          }
+          let result = await response.json();
+          
+          if(result){
+            if(result.message=="bookmark successfully"){
+              let a1a=document.getElementById(`${id[0]}-unsave`)
+              a1a.style.color="red"
+              console.log("---1---",a1a)
+            }else{
+              let a2a=document.getElementById(`${id[0]}-save`)
+              a2a.style.color="black"
+              console.log("---2---",a2a)
+            }
+            console.log("------",result.message)
+          }
+        }
+      })
+    })
+
+  document.querySelectorAll(".deletest").forEach(button=>{
+    button.addEventListener("click",async (event)=>{
+      event.preventDefault()
+      let id=button.getAttribute("id")
+      if(id){
+        let response=await fetch(`/removestory/${id}`,{method:"DELETE"})
+        let result=await response.json()
+        document.getElementById(`${result.id}-story`).remove()
+        socket.emit("removestory",result.id)
+        // response=await fetch(`/removebookmarkpost/${id[0]}`,{method:"GET"})
+      }
+    })
+  })
+  socket.on("removestory1",(id)=>{
+    document.getElementById(`${id}-story`).remove()
+  })
+
+  </script>
+  <%}%>

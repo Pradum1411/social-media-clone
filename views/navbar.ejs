@@ -1,0 +1,36 @@
+<nav>
+
+
+    <div class="container">
+        <h2 class="logo">Pradum Kumar</h2>
+        <h1 class="popup-message">
+            <%if(errorMessage){%>
+                <span style="color: rgb(113, 5, 5);">
+                    <%=errorMessage%>
+                </span>
+                <%}%>
+                    <%if(successMessage){%>
+                        <span style="color: rgb(34, 139, 8);">
+                            <%=successMessage%>
+                        </span>
+                        <%}%>
+        </h1>
+        <div class="search-bar">
+            <i class="uil uil-search"></i>
+            <input type="search" placeholder="Search for creators" id="123"/>
+        </div>
+        <div class="create">
+            <% if(user!=null){%>
+                <span style="font-size: 20px; ">@<%=user.username%></span>
+                <div class="profile-pic">
+                    <img src=<%=user.profilePicture%> alt="" />
+                </div>
+                <%} else {%>
+                    <a href="/login" class="login_page">login</a>
+                    <%}%>
+        </div>
+    </div>
+    <%-include("createpost")-%>
+    <%-include("addstory")-%>
+
+</nav>

@@ -1,0 +1,83 @@
+<div class="left">
+
+  <div class="sidebar">
+    <a href="/" class="menu-item" id="home">
+      <span><i class="uil uil-home"></i></span>
+      <h3>Home</h3>
+    </a>
+    <a class="menu-item ">
+      <span><i class="uil uil-compass"></i></span>
+      <h3>Explore</h3>
+    </a>
+
+    <a class="menu-item" id="notifications">
+      <span><i class="uil uil-bell"></i></span>
+      <h3>Notifications</h3>
+      <div class="notifications-popup notification_1 noti">
+
+        <div>
+          
+        </div>
+      </div>
+    </a>
+
+    <a href="/messages" class="menu-item" id="messages-notifications">
+      <i class="uil uil-envelope"></i></span>
+      <h3>Messages</h3>
+    </a>
+    <a class="menu-item ">
+      <span><i class="uil uil-bookmark"></i></span>
+      <h3>Bookmarks</h3>
+    </a>
+    <a class="menu-item ">
+      <span><i class="uil uil-analytics"></i></span>
+      <h3>Analytics</h3>
+    </a>
+    <a class="menu-item" id="theme">
+      <span><i class="uil uil-palette"></i></span>
+      <h3>Theme</h3>
+      
+    </a>
+    <a class="menu-item ">
+      <span><i class="uil uil-setting"></i></span>
+      <h3>Settings</h3>
+    </a>
+    <!-- <label class="btn btn-primary" for="create-post">Create Post</label> -->
+    <% if(user!=null){%>
+      <a class="menu-item " id="createpost">
+        <span><i class="fa-solid fa-pen-to-square"></i></span>
+        <h3 style=" color:  hsl(252, 30%, 10%);">Create Post</h3>
+      </a>
+      <a href="/getprofile/<%=user._id%>" class="menu-item" id="userprofile">
+        <span>
+          <div class="profile-pic" style="margin-left: 30px;">
+            <img src=<%=user.profilePicture%> alt="" >
+          </div>
+        </span>
+        <h3>profile</h3>
+      </a>
+      <a href="/logout" class="menu-item ">
+        <span style="margin-left: 10px;"><i class="fa-solid fa-right-from-bracket"></i></span>
+        <h3>logout</h3>
+      </a>
+      <%}%>
+  </div>
+ 
+</div>
+
+
+<%if(user!=null){%>
+<script>
+// console.log("hiihhi socket11")
+  document.querySelector("#notifications").addEventListener("click", () => {
+    let dd1 = document.querySelector(".notifications-popup").style.display
+    if (dd1 == 'block') {
+      document.querySelector(".noti").style.display = "none"
+    }
+    else {
+      document.querySelector(".noti").style.display = "block"
+    }
+  })
+  
+</script>
+<%}%>
